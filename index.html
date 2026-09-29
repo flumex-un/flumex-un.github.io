@@ -1200,6 +1200,16 @@ function copyMail(btn){
   var navLinks = Array.prototype.slice.call(document.querySelectorAll('[data-page]'));
   var validPages = pages.map(function(p){ return p.getAttribute('data-page'); });
 
+  var titles = {
+    'inicio': 'FLUMEX',
+    'quienes-somos': 'Quiénes somos · FLUMEX',
+    'proyectos': 'Proyectos · FLUMEX',
+    'laboratorios': 'Laboratorios · FLUMEX',
+    'integrantes': 'Integrantes · FLUMEX',
+    'unete': 'Únete · FLUMEX',
+    'contacto': 'Contacto · FLUMEX'
+  };
+
   function pathFor(name){
     return name === 'inicio' ? '/' : '/' + name + '/';
   }
@@ -1218,6 +1228,7 @@ function copyMail(btn){
       a.classList.toggle('is-current', match);
       if(match){ a.setAttribute('aria-current','page'); } else { a.removeAttribute('aria-current'); }
     });
+    document.title = titles[name] || 'FLUMEX';
     if(scroll !== false){ window.scrollTo(0,0); }
   }
 
