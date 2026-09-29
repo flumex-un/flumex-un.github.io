@@ -601,20 +601,20 @@ footer{
 
 <header class="nav">
   <div class="wrap nav-row">
-    <a class="brand" href="#inicio" data-page="inicio">
+    <a class="brand" href="/" data-page="inicio">
       <img src="img/flumex-logo.png" alt="" aria-hidden="true">
       <span class="brand-divider" aria-hidden="true"></span>
       <img class="gnum-logo" src="img/logo-gnum-flumex.png" alt="" aria-hidden="true">
       <span>FLUMEX</span>
     </a>
     <nav class="links">
-      <a href="#inicio" data-page="inicio">Inicio</a>
-      <a href="#quienes-somos" data-page="quienes-somos">Quiénes somos</a>
-      <a href="#proyectos" data-page="proyectos">Proyectos</a>
-      <a href="#laboratorios" data-page="laboratorios">Laboratorios</a>
-      <a href="#integrantes" data-page="integrantes">Integrantes</a>
-      <a href="#unete" data-page="unete">Únete</a>
-      <a href="#contacto" data-page="contacto">Contacto</a>
+      <a href="/" data-page="inicio">Inicio</a>
+      <a href="/quienes-somos/" data-page="quienes-somos">Quiénes somos</a>
+      <a href="/proyectos/" data-page="proyectos">Proyectos</a>
+      <a href="/laboratorios/" data-page="laboratorios">Laboratorios</a>
+      <a href="/integrantes/" data-page="integrantes">Integrantes</a>
+      <a href="/unete/" data-page="unete">Únete</a>
+      <a href="/contacto/" data-page="contacto">Contacto</a>
     </nav>
   </div>
 </header>
@@ -629,8 +629,8 @@ footer{
         <h1>Mecánica de fluidos,<br>del modelo al túnel de viento.</h1>
         <p class="lede max-prose">FLUMEX es el primer semillero de mecánica de fluidos de la Universidad Nacional de Colombia, sede Bogotá. Aplicamos la aerodinámica y la hidrodinámica a la ingeniería mediante modelos matemáticos, experimentación y simulación computacional.</p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="#proyectos">Ver proyectos</a>
-          <a class="btn btn-ghost" href="#unete">Cómo unirte</a>
+          <a class="btn btn-primary" href="/proyectos/" data-page="proyectos">Ver proyectos</a>
+          <a class="btn btn-ghost" href="/unete/" data-page="unete">Cómo unirte</a>
         </div>
       </div>
       <figure class="hero-figure">
@@ -1200,6 +1200,14 @@ function copyMail(btn){
   var navLinks = Array.prototype.slice.call(document.querySelectorAll('[data-page]'));
   var validPages = pages.map(function(p){ return p.getAttribute('data-page'); });
 
+  function pathFor(name){
+    return name === 'inicio' ? '/' : '/' + name + '/';
+  }
+  function nameFromPath(path){
+    var clean = path.replace(/^\/|\/$/g, '');
+    return clean === '' ? 'inicio' : clean;
+  }
+
   function showPage(name, scroll){
     if(validPages.indexOf(name) === -1){ name = 'inicio'; }
     pages.forEach(function(p){
@@ -1215,22 +1223,29 @@ function copyMail(btn){
 
   function go(name){
     showPage(name);
-    history.replaceState(null, '', '#' + name);
+    history.pushState({page:name}, '', pathFor(name));
   }
 
   document.addEventListener('click', function(e){
-    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    var a = e.target.closest ? e.target.closest('a[data-page]') : null;
     if(!a) return;
-    var hash = a.getAttribute('href').slice(1);
-    if(validPages.indexOf(hash) === -1) return;
+    var name = a.getAttribute('data-page');
+    if(validPages.indexOf(name) === -1) return;
     e.preventDefault();
-    go(hash);
+    go(name);
   });
 
   window.addEventListener('popstate', function(){
-    showPage(location.hash.replace('#',''));
+    showPage(nameFromPath(location.pathname));
   });
 
-  showPage(location.hash.replace('#','') || 'inicio', false);
+  // A direct visit or refresh on a path like /proyectos/ hits GitHub Pages' 404.html,
+  // which redirects here as /?p=%2Fproyectos%2F — restore the clean path before rendering.
+  var redirectParam = new URLSearchParams(location.search).get('p');
+  if(redirectParam){
+    history.replaceState(null, '', redirectParam);
+  }
+
+  showPage(nameFromPath(location.pathname), false);
 })();
 </script>
