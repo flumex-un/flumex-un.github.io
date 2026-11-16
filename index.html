@@ -1,4 +1,10 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FLUMEX</title>
+<meta name="description" content="FLUMEX es el primer semillero de mecánica de fluidos de la Universidad Nacional de Colombia, sede Bogotá. Aerodinámica e hidrodinámica aplicadas a la ingeniería mediante modelos matemáticos, experimentación y simulación computacional.">
 <link rel="icon" type="image/png" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/favicon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&display=swap">
@@ -7,7 +13,9 @@
    navy ink, hairline rules and a fine grid motif under the hero, echoing FLUMEX's own
    wind-tunnel schematics. Deliberately single-theme (white paper), so the real logo and
    photos never compete with a dark shell. One sans-serif family for the whole page —
-   no serif anywhere — weight and size carry the hierarchy instead. */
+   no serif anywhere — weight and size carry the hierarchy instead.
+   Bilingual: every text exists twice, data-l="es" and data-l="en"; <html lang> decides
+   which one shows. Spanish is the default. */
 :root{
   --bg:#ffffff;
   --surface:#f5f8f9;
@@ -25,6 +33,10 @@
   --font-display:'Source Sans 3',system-ui,-apple-system,sans-serif;
   --font-body:'Source Sans 3',system-ui,-apple-system,sans-serif;
 }
+
+/* ---------- idioma / language ---------- */
+html[lang="es"] [data-l="en"],
+html[lang="en"] [data-l="es"]{display:none !important;}
 
 *{box-sizing:border-box;}
 body{
@@ -72,6 +84,22 @@ p{margin:0;}
 .section-head h2{font-size:clamp(1.75rem,3.4vw,2.5rem);}
 .tag-alt{background:var(--surface-2);}
 :focus-visible{outline:2px solid var(--accent-2);outline-offset:3px;}
+main:focus{outline:none;}
+
+.skip{
+  position:absolute;
+  left:-9999px;
+  top:0;
+}
+.skip:focus{
+  left:16px;
+  top:12px;
+  z-index:60;
+  background:var(--bg);
+  padding:10px 14px;
+  border:1px solid var(--border-strong);
+  border-radius:3px;
+}
 
 /* ---------- nav ---------- */
 header.nav{
@@ -83,6 +111,7 @@ header.nav{
   border-bottom:1px solid var(--border);
 }
 .nav-row{
+  position:relative;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -99,13 +128,14 @@ header.nav{
   letter-spacing:0.01em;
   text-decoration:none;
   color:var(--fg);
+  flex:none;
 }
 .brand img{height:42px;width:42px;object-fit:contain;}
 .brand .gnum-logo{height:32px;width:32px;}
 .brand-divider{width:1px;height:28px;background:var(--border-strong);}
 nav.links{
   display:flex;
-  gap:clamp(10px,2vw,22px);
+  gap:clamp(10px,1.6vw,22px);
   flex-wrap:wrap;
   font-size:0.9rem;
 }
@@ -117,8 +147,86 @@ nav.links a{
 }
 nav.links a:hover{color:var(--fg);border-color:var(--accent-2);}
 nav.links a.is-current{color:var(--fg);border-color:var(--accent);}
-@media (max-width:760px){
-  nav.links{display:none;}
+
+.nav-tools{display:flex;align-items:center;gap:12px;flex:none;}
+.lang-switch{
+  display:flex;
+  border:1px solid var(--border-strong);
+  border-radius:3px;
+  overflow:hidden;
+}
+.lang-switch button{
+  font-family:var(--font-body);
+  font-size:0.82rem;
+  font-weight:600;
+  min-width:40px;
+  min-height:34px;
+  padding:0 8px;
+  background:transparent;
+  color:var(--fg-muted);
+  border:0;
+  cursor:pointer;
+}
+.lang-switch button + button{border-left:1px solid var(--border-strong);}
+.lang-switch button:hover{color:var(--fg);}
+.lang-switch button[aria-pressed="true"]{background:var(--fg);color:var(--bg);}
+.menu-btn{display:none;}
+
+@media (max-width:960px){
+  .menu-btn{
+    display:inline-flex;
+    align-items:center;
+    min-height:44px;
+    padding:0 14px;
+    font-family:var(--font-body);
+    font-size:0.92rem;
+    font-weight:600;
+    color:var(--fg);
+    background:transparent;
+    border:1px solid var(--border-strong);
+    border-radius:3px;
+    cursor:pointer;
+  }
+  .menu-btn[aria-expanded="true"]{background:var(--surface-2);}
+  .lang-switch button{min-height:44px;min-width:44px;}
+  nav.links{
+    display:none;
+    position:absolute;
+    left:0;
+    right:0;
+    top:100%;
+    flex-direction:column;
+    flex-wrap:nowrap;
+    gap:0;
+    padding:4px clamp(16px,4vw,40px) 12px;
+    background:var(--bg);
+    border-bottom:1px solid var(--border);
+    font-size:1rem;
+  }
+  nav.links.is-open{display:flex;}
+  nav.links a{
+    display:flex;
+    align-items:center;
+    min-height:48px;
+    padding:0 2px;
+    border-bottom:1px solid var(--border);
+  }
+  nav.links a:last-child{border-bottom:none;}
+  nav.links a:hover{border-color:var(--border);}
+  nav.links a.is-current{
+    border-color:var(--border);
+    font-weight:600;
+    box-shadow:inset 3px 0 0 var(--accent);
+    padding-left:14px;
+  }
+}
+@media (max-width:420px){
+  .brand{gap:8px;font-size:1.1rem;}
+  .brand img{height:34px;width:34px;}
+  .brand .gnum-logo{height:26px;width:26px;}
+  .brand-divider{height:24px;}
+  .nav-tools{gap:8px;}
+  .menu-btn{padding:0 10px;}
 }
 
 /* ---------- page switching ---------- */
@@ -176,6 +284,7 @@ nav.links a.is-current{color:var(--fg);border-color:var(--accent);}
   font-weight:600;
   font-size:0.95rem;
   padding:12px 22px;
+  min-height:44px;
   border-radius:3px;
   text-decoration:none;
   display:inline-flex;
@@ -237,6 +346,7 @@ nav.links a.is-current{color:var(--fg);border-color:var(--accent);}
 @media (max-width:640px){
   .stat-strip{grid-template-columns:repeat(2,1fr);}
   .stat-strip div:nth-child(3){border-left:none;}
+  .stat-strip div:nth-child(n+3){border-top:1px solid var(--border);}
 }
 
 /* ---------- generic cards / grids ---------- */
@@ -384,7 +494,7 @@ nav.links a.is-current{color:var(--fg);border-color:var(--accent);}
 .proj-media img{width:100%;height:150px;object-fit:cover;}
 .proj-media figcaption{
   font-family:var(--font-body);
-  font-size:0.68rem;
+  font-size:0.78rem;
   color:var(--fg-muted);
   padding:8px 10px;
   border-top:1px solid var(--border);
@@ -435,7 +545,17 @@ nav.links a.is-current{color:var(--fg);border-color:var(--accent);}
   border:1px solid var(--border-strong);
 }
 .avatar img{width:100%;height:100%;object-fit:cover;}
-.avatar.badge{background:var(--surface-2);}
+.avatar.badge{
+  background:var(--surface-2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:var(--font-body);
+  font-weight:800;
+  font-size:1.15rem;
+  color:var(--accent);
+}
+.avatar.badge.lg{font-size:1.3rem;}
 .person-card h3{font-size:1.05rem;margin-bottom:2px;}
 .person-role{
   font-family:var(--font-body);
@@ -458,21 +578,6 @@ nav.links a.is-current{color:var(--fg);border-color:var(--accent);}
   font-size:0.82rem;
   color:var(--fg-muted);
 }
-.placeholder-card{
-  border-style:dashed;
-  border-color:var(--border-strong);
-  background:transparent;
-}
-.placeholder-card .avatar{
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-body);
-  color:var(--fg-muted);
-  font-size:0.7rem;
-  background:var(--surface-2);
-}
-.placeholder-card h3,
-.placeholder-card .person-role,
-.placeholder-card .person-mail{color:var(--fg-muted);}
 .note-block{
   margin-top:22px;
   padding:16px 18px;
@@ -502,7 +607,7 @@ nav.links a.is-current{color:var(--fg);border-color:var(--accent);}
   padding-top:2px;
 }
 .step-list b{display:block;margin-bottom:3px;}
-.step-list span{color:var(--fg-muted);font-size:0.95rem;}
+.step-list .step-desc{display:block;color:var(--fg-muted);font-size:0.95rem;}
 
 /* contacto */
 .contact-row{
@@ -517,12 +622,21 @@ nav.links a.is-current{color:var(--fg);border-color:var(--accent);}
   background:var(--surface);
 }
 .contact-row + .contact-row{margin-top:12px;}
-.contact-row .addr{font-family:var(--font-body);font-size:0.95rem;}
+.contact-row .label{
+  display:block;
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:0.85rem;
+  color:var(--fg-muted);
+  margin-bottom:4px;
+}
+.contact-row .addr{display:block;font-family:var(--font-body);font-size:0.95rem;overflow-wrap:anywhere;}
 .copy-btn{
   font-family:var(--font-body);
-  font-size:0.82rem;
+  font-size:0.85rem;
   font-weight:600;
-  padding:8px 14px;
+  min-height:44px;
+  padding:0 16px;
   border-radius:3px;
   border:1px solid var(--border-strong);
   background:transparent;
@@ -551,9 +665,13 @@ footer{
   color:var(--fg-muted);
   text-align:right;
 }
+@media (max-width:640px){
+  .footer-meta{text-align:left;}
+}
 /* expanded project media */
 .media-block{margin-top:22px;}
 .media-block .cap{
+  display:block;
   font-family:var(--font-body);
   font-size:0.78rem;
   letter-spacing:0.04em;
@@ -566,7 +684,7 @@ footer{
 .video-figure video{width:100%;display:block;}
 .video-figure figcaption{
   font-family:var(--font-body);
-  font-size:0.68rem;
+  font-size:0.78rem;
   color:var(--fg-muted);
   padding:8px 10px;
   border-top:1px solid var(--border);
@@ -598,6 +716,10 @@ footer{
 .spinoff-body h3{font-size:1.3rem;}
 .spinoff-body p{color:var(--fg-muted);}
 </style>
+</head>
+<body>
+
+<a class="skip" href="#top"><span data-l="es">Saltar al contenido</span><span data-l="en">Skip to content</span></a>
 
 <header class="nav">
   <div class="wrap nav-row">
@@ -607,15 +729,22 @@ footer{
       <img class="gnum-logo" src="img/logo-gnum-flumex.png" alt="" aria-hidden="true">
       <span>FLUMEX</span>
     </a>
-    <nav class="links">
-      <a href="/" data-page="inicio">Inicio</a>
-      <a href="/quienes-somos/" data-page="quienes-somos">Quiénes somos</a>
-      <a href="/proyectos/" data-page="proyectos">Proyectos</a>
-      <a href="/laboratorios/" data-page="laboratorios">Laboratorios</a>
-      <a href="/integrantes/" data-page="integrantes">Integrantes</a>
-      <a href="/unete/" data-page="unete">Únete</a>
-      <a href="/contacto/" data-page="contacto">Contacto</a>
+    <nav class="links" id="site-nav" aria-label="Principal" data-label-es="Principal" data-label-en="Main">
+      <a href="/" data-page="inicio"><span data-l="es">Inicio</span><span data-l="en">Home</span></a>
+      <a href="/quienes-somos/" data-page="quienes-somos"><span data-l="es">Quiénes somos</span><span data-l="en">About us</span></a>
+      <a href="/proyectos/" data-page="proyectos"><span data-l="es">Proyectos</span><span data-l="en">Projects</span></a>
+      <a href="/laboratorios/" data-page="laboratorios"><span data-l="es">Laboratorios</span><span data-l="en">Labs</span></a>
+      <a href="/integrantes/" data-page="integrantes"><span data-l="es">Integrantes</span><span data-l="en">Members</span></a>
+      <a href="/unete/" data-page="unete"><span data-l="es">Únete</span><span data-l="en">Join us</span></a>
+      <a href="/contacto/" data-page="contacto"><span data-l="es">Contacto</span><span data-l="en">Contact</span></a>
     </nav>
+    <div class="nav-tools">
+      <div class="lang-switch" role="group" aria-label="Idioma / Language">
+        <button type="button" data-set-lang="es" aria-pressed="true" aria-label="Español">ES</button>
+        <button type="button" data-set-lang="en" aria-pressed="false" aria-label="English">EN</button>
+      </div>
+      <button type="button" class="menu-btn" aria-expanded="false" aria-controls="site-nav"><span data-l="es">Menú</span><span data-l="en">Menu</span></button>
+    </div>
   </div>
 </header>
 
@@ -625,26 +754,27 @@ footer{
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="eyebrow">GNUM · FLUMEX — Facultad de Ingeniería, UNAL Sede Bogotá</span>
-        <h1>Mecánica de fluidos,<br>del modelo al túnel de viento.</h1>
-        <p class="lede max-prose">FLUMEX es el primer semillero de mecánica de fluidos de la Universidad Nacional de Colombia, sede Bogotá. Aplicamos la aerodinámica y la hidrodinámica a la ingeniería mediante modelos matemáticos, experimentación y simulación computacional.</p>
+        <span class="eyebrow"><span data-l="es">GNUM · FLUMEX — Facultad de Ingeniería, UNAL Sede Bogotá</span><span data-l="en">GNUM · FLUMEX, Faculty of Engineering, UNAL Bogotá campus</span></span>
+        <h1><span data-l="es">Mecánica de fluidos,<br>del modelo al túnel de viento.</span><span data-l="en">Fluid mechanics,<br>from the model to the wind tunnel.</span></h1>
+        <p class="lede max-prose" data-l="es">FLUMEX es el primer semillero de mecánica de fluidos de la Universidad Nacional de Colombia, sede Bogotá. Aplicamos la aerodinámica y la hidrodinámica a la ingeniería mediante modelos matemáticos, experimentación y simulación computacional.</p>
+        <p class="lede max-prose" data-l="en">FLUMEX is the first fluid mechanics student research group (semillero) at the Universidad Nacional de Colombia, Bogotá campus. We apply aerodynamics and hydrodynamics to engineering through mathematical models, experiments and computational simulation.</p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="/proyectos/" data-page="proyectos">Ver proyectos</a>
-          <a class="btn btn-ghost" href="/unete/" data-page="unete">Cómo unirte</a>
+          <a class="btn btn-primary" href="/proyectos/" data-page="proyectos"><span data-l="es">Ver proyectos</span><span data-l="en">See our projects</span></a>
+          <a class="btn btn-ghost" href="/unete/" data-page="unete"><span data-l="es">Cómo unirte</span><span data-l="en">How to join</span></a>
         </div>
       </div>
       <figure class="hero-figure">
-        <img src="img/turbina-campus.jpg" alt="Turbina eólica Savonius-Darrieus impresa en 3D, ensayada al aire libre en el campus de la UNAL sede Bogotá">
-        <figcaption>Turbina Savonius&#8209;Darrieus · ensayo en campus · proyecto 2025&#8211;2026</figcaption>
+        <img src="img/turbina-campus.jpg" alt="Turbina eólica Savonius-Darrieus impresa en 3D, ensayada al aire libre en el campus de la UNAL sede Bogotá" data-alt-en="3D-printed Savonius-Darrieus wind turbine tested outdoors on the UNAL Bogotá campus">
+        <figcaption><span data-l="es">Turbina Savonius&#8209;Darrieus · ensayo en campus · proyecto 2025&#8211;2026</span><span data-l="en">Savonius&#8209;Darrieus turbine · campus test · 2025&#8211;2026 project</span></figcaption>
       </figure>
     </div>
 
     <div class="wrap">
       <div class="stat-strip">
-        <div><span class="k">Fundación</span><span class="v">16.12.2020</span></div>
-        <div><span class="k">Código semillero</span><span class="v">60</span></div>
-        <div><span class="k">Dependencia</span><span class="v">Ing. Mecánica y Mecatrónica</span></div>
-        <div><span class="k">Estado</span><span class="v">Activo</span></div>
+        <div><span class="k"><span data-l="es">Fundación</span><span data-l="en">Founded</span></span><span class="v">16.12.2020</span></div>
+        <div><span class="k"><span data-l="es">Código semillero</span><span data-l="en">Group code</span></span><span class="v">60</span></div>
+        <div><span class="k"><span data-l="es">Dependencia</span><span data-l="en">Department</span></span><span class="v"><span data-l="es">Ing. Mecánica y Mecatrónica</span><span data-l="en">Mechanical and Mechatronics Eng.</span></span></div>
+        <div><span class="k"><span data-l="es">Estado</span><span data-l="en">Status</span></span><span class="v"><span data-l="es">Activo</span><span data-l="en">Active</span></span></div>
       </div>
     </div>
   </section>
@@ -654,30 +784,35 @@ footer{
   <section class="section" id="quienes-somos">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Quiénes somos</span>
-        <h2>Un semillero nacido de una pregunta simple.</h2>
-        <p class="max-prose" style="color:var(--fg-muted)">Cuando FLUMEX se propuso en 2020, ningún semillero estudiantil de la UNAL sede Bogotá se dedicaba a la mecánica de fluidos. El grupo nace para llenar ese vacío: llevar la aerodinámica, la hidrodinámica y las ciencias térmicas del aula al laboratorio.</p>
+        <span class="eyebrow"><span data-l="es">Quiénes somos</span><span data-l="en">About us</span></span>
+        <h2><span data-l="es">Un semillero nacido de una pregunta simple.</span><span data-l="en">A research group born from a simple question.</span></h2>
+        <p class="max-prose" style="color:var(--fg-muted)" data-l="es">Cuando FLUMEX se propuso en 2020, ningún semillero estudiantil de la UNAL sede Bogotá se dedicaba a la mecánica de fluidos. El grupo nace para llenar ese vacío: llevar la aerodinámica, la hidrodinámica y las ciencias térmicas del aula al laboratorio.</p>
+        <p class="max-prose" style="color:var(--fg-muted)" data-l="en">When FLUMEX was proposed in 2020, no student research group at UNAL Bogotá worked on fluid mechanics. The group was created to fill that gap and take aerodynamics, hydrodynamics and thermal sciences from the classroom to the lab.</p>
       </div>
 
       <div class="grid-2">
         <div class="card">
-          <span class="label">Razón de ser</span>
-          <p style="color:var(--fg)">Generar conocimiento en las ramas de aerodinámica e hidráulica de la mecánica de fluidos, y desarrollar innovaciones en esa rama de la ingeniería a nivel Colombia.</p>
+          <span class="label"><span data-l="es">Razón de ser</span><span data-l="en">Purpose</span></span>
+          <p style="color:var(--fg)" data-l="es">Generar conocimiento en las ramas de aerodinámica e hidráulica de la mecánica de fluidos, y desarrollar innovaciones en esa rama de la ingeniería a nivel Colombia.</p>
+          <p style="color:var(--fg)" data-l="en">To generate knowledge in the aerodynamics and hydraulics branches of fluid mechanics, and to develop innovations in this field of engineering in Colombia.</p>
         </div>
         <div class="card">
-          <span class="label">Misión</span>
-          <p style="color:var(--fg)">Estudiar los fenómenos de la mecánica de fluidos —especialmente aerodinámica e hidráulica— por medio de modelos y prácticas experimentales, con el apoyo de simulaciones computacionales.</p>
+          <span class="label"><span data-l="es">Misión</span><span data-l="en">Mission</span></span>
+          <p style="color:var(--fg)" data-l="es">Estudiar los fenómenos de la mecánica de fluidos —especialmente aerodinámica e hidráulica— por medio de modelos y prácticas experimentales, con el apoyo de simulaciones computacionales.</p>
+          <p style="color:var(--fg)" data-l="en">To study fluid mechanics phenomena, especially in aerodynamics and hydraulics, through models and experimental work supported by computational simulation.</p>
         </div>
       </div>
 
       <div class="card" style="margin-top:20px;">
-        <span class="label">Visión fundacional · redactada en 2021</span>
-        <p style="color:var(--fg)">Que FLUMEX se posicione en Bogotá como uno de los semilleros importantes en mecánica de fluidos, habiendo publicado artículos científicos de divulgación en el área y hecho uso del capital humano y las instalaciones de la Universidad Nacional de Colombia, sede Bogotá.</p>
+        <span class="label"><span data-l="es">Visión fundacional · redactada en 2021</span><span data-l="en">Founding vision · written in 2021</span></span>
+        <p style="color:var(--fg)" data-l="es">Que FLUMEX se posicione en Bogotá como uno de los semilleros importantes en mecánica de fluidos, habiendo publicado artículos científicos de divulgación en el área y hecho uso del capital humano y las instalaciones de la Universidad Nacional de Colombia, sede Bogotá.</p>
+        <p style="color:var(--fg)" data-l="en">For FLUMEX to become one of the leading student research groups in fluid mechanics in Bogotá, having published science outreach articles in the field and made use of the people and facilities of the Universidad Nacional de Colombia, Bogotá campus.</p>
       </div>
 
       <div class="card" style="margin-top:20px;">
-        <span class="label">Justificación</span>
-        <p style="color:var(--fg)">El enfoque del semillero es fundamental para dar soluciones tangibles a problemas de generación y distribución de energía, análisis hidrodinámico y aerodinámico de maquinaria, y desarrollo de prototipos experimentales. En una región con proyección de crecimiento en generación hidroeléctrica, y en línea con el ODS 9 de la ONU ("industria, innovación e infraestructura") y el ODS 7 ("energía asequible, segura, sostenible y moderna"), el trabajo de FLUMEX es pertinente para el desarrollo tecnológico del país.</p>
+        <span class="label"><span data-l="es">Justificación</span><span data-l="en">Rationale</span></span>
+        <p style="color:var(--fg)" data-l="es">El enfoque del semillero es fundamental para dar soluciones tangibles a problemas de generación y distribución de energía, análisis hidrodinámico y aerodinámico de maquinaria, y desarrollo de prototipos experimentales. En una región con proyección de crecimiento en generación hidroeléctrica, y en línea con el ODS 9 de la ONU ("industria, innovación e infraestructura") y el ODS 7 ("energía asequible, segura, sostenible y moderna"), el trabajo de FLUMEX es pertinente para el desarrollo tecnológico del país.</p>
+        <p style="color:var(--fg)" data-l="en">The group's focus is essential to provide tangible solutions to problems in energy generation and distribution, hydrodynamic and aerodynamic analysis of machinery, and the development of experimental prototypes. In a region where hydroelectric generation is expected to grow, and in line with UN SDG 9 ("industry, innovation and infrastructure") and SDG 7 ("affordable, reliable, sustainable and modern energy"), FLUMEX's work is relevant to the country's technological development.</p>
       </div>
     </div>
   </section>
@@ -685,23 +820,24 @@ footer{
   <section class="section" id="objetivos">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Objetivos</span>
-        <h2>Qué nos proponemos.</h2>
+        <span class="eyebrow"><span data-l="es">Objetivos</span><span data-l="en">Objectives</span></span>
+        <h2><span data-l="es">Qué nos proponemos.</span><span data-l="en">What we set out to do.</span></h2>
       </div>
       <div class="grid-2">
         <div class="card">
-          <span class="label">Objetivo general</span>
-          <p style="color:var(--fg)">Analizar, estudiar y aplicar los conceptos y fenómenos de la mecánica de fluidos y sus ramas —especialmente hidrodinámica y aerodinámica— mediante la implementación de modelos matemáticos y prácticas experimentales soportadas en el análisis de simulaciones computacionales.</p>
+          <span class="label"><span data-l="es">Objetivo general</span><span data-l="en">General objective</span></span>
+          <p style="color:var(--fg)" data-l="es">Analizar, estudiar y aplicar los conceptos y fenómenos de la mecánica de fluidos y sus ramas —especialmente hidrodinámica y aerodinámica— mediante la implementación de modelos matemáticos y prácticas experimentales soportadas en el análisis de simulaciones computacionales.</p>
+          <p style="color:var(--fg)" data-l="en">To analyze, study and apply the concepts and phenomena of fluid mechanics and its branches, especially hydrodynamics and aerodynamics, by implementing mathematical models and experimental work supported by the analysis of computational simulations.</p>
         </div>
         <div class="card">
-          <span class="label">Objetivos específicos</span>
+          <span class="label"><span data-l="es">Objetivos específicos</span><span data-l="en">Specific objectives</span></span>
           <ul class="obj-list">
-            <li><span class="mark"></span><p>Estudiar aerodinámica, hidrodinámica, transferencia de calor y termodinámica, generando innovaciones en dichos campos.</p></li>
-            <li><span class="mark"></span><p>Implementar modelos matemáticos de fenómenos de fluidos que apoyen los proyectos del semillero.</p></li>
-            <li><span class="mark"></span><p>Realizar prácticas experimentales como complemento a los modelos teóricos.</p></li>
-            <li><span class="mark"></span><p>Desarrollar prototipos que permitan validar los modelos teóricos de las investigaciones.</p></li>
-            <li><span class="mark"></span><p>Organizar eventos de difusión de resultados y temas de interés del semillero.</p></li>
-            <li><span class="mark"></span><p>Publicar al menos dos veces al año: artículos científicos, ponencias en congresos o informes.</p></li>
+            <li><span class="mark"></span><p><span data-l="es">Estudiar aerodinámica, hidrodinámica, transferencia de calor y termodinámica, generando innovaciones en dichos campos.</span><span data-l="en">Study aerodynamics, hydrodynamics, heat transfer and thermodynamics, and develop innovations in these fields.</span></p></li>
+            <li><span class="mark"></span><p><span data-l="es">Implementar modelos matemáticos de fenómenos de fluidos que apoyen los proyectos del semillero.</span><span data-l="en">Implement mathematical models of fluid phenomena that support the group's projects.</span></p></li>
+            <li><span class="mark"></span><p><span data-l="es">Realizar prácticas experimentales como complemento a los modelos teóricos.</span><span data-l="en">Carry out experimental work to complement the theoretical models.</span></p></li>
+            <li><span class="mark"></span><p><span data-l="es">Desarrollar prototipos que permitan validar los modelos teóricos de las investigaciones.</span><span data-l="en">Build prototypes to validate the theoretical models behind our research.</span></p></li>
+            <li><span class="mark"></span><p><span data-l="es">Organizar eventos de difusión de resultados y temas de interés del semillero.</span><span data-l="en">Organize events to share results and topics of interest to the group.</span></p></li>
+            <li><span class="mark"></span><p><span data-l="es">Publicar al menos dos veces al año: artículos científicos, ponencias en congresos o informes.</span><span data-l="en">Publish at least twice a year: scientific articles, conference papers or reports.</span></p></li>
           </ul>
         </div>
       </div>
@@ -711,16 +847,16 @@ footer{
   <section class="section" id="enfoque">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Enfoque</span>
-        <h2>Las preguntas que guían la investigación.</h2>
+        <span class="eyebrow"><span data-l="es">Enfoque</span><span data-l="en">Approach</span></span>
+        <h2><span data-l="es">Las preguntas que guían la investigación.</span><span data-l="en">The questions that guide our research.</span></h2>
       </div>
       <div class="enfoque-grid">
-        <div><span class="q-index">01</span>¿Cómo impactar positivamente el campus con el uso y las aplicaciones de la mecánica de fluidos?</div>
-        <div><span class="q-index">02</span>¿Por qué son importantes las ciencias térmicas para la ingeniería y la física?</div>
-        <div><span class="q-index">03</span>¿Cómo ayudar al desarrollo del país a través de la mecánica de fluidos?</div>
-        <div><span class="q-index">04</span>¿Qué nuevas aplicaciones se pueden dar a la turbomaquinaria existente para mejorar condiciones de vida?</div>
-        <div><span class="q-index">05</span>¿Cómo utilizar la mecánica de fluidos y las leyes de la termodinámica para la transformación de energías?</div>
-        <div><span class="q-index">06</span>¿Qué proyectos activos en la universidad se beneficiarían de la mecánica de fluidos?</div>
+        <div><span class="q-index">01</span><span data-l="es">¿Cómo impactar positivamente el campus con el uso y las aplicaciones de la mecánica de fluidos?</span><span data-l="en">How can fluid mechanics and its applications have a positive impact on campus?</span></div>
+        <div><span class="q-index">02</span><span data-l="es">¿Por qué son importantes las ciencias térmicas para la ingeniería y la física?</span><span data-l="en">Why do thermal sciences matter for engineering and physics?</span></div>
+        <div><span class="q-index">03</span><span data-l="es">¿Cómo ayudar al desarrollo del país a través de la mecánica de fluidos?</span><span data-l="en">How can fluid mechanics help the country develop?</span></div>
+        <div><span class="q-index">04</span><span data-l="es">¿Qué nuevas aplicaciones se pueden dar a la turbomaquinaria existente para mejorar condiciones de vida?</span><span data-l="en">What new uses can existing turbomachinery have to improve living conditions?</span></div>
+        <div><span class="q-index">05</span><span data-l="es">¿Cómo utilizar la mecánica de fluidos y las leyes de la termodinámica para la transformación de energías?</span><span data-l="en">How can fluid mechanics and the laws of thermodynamics be used to convert energy?</span></div>
+        <div><span class="q-index">06</span><span data-l="es">¿Qué proyectos activos en la universidad se beneficiarían de la mecánica de fluidos?</span><span data-l="en">Which active projects at the university would benefit from fluid mechanics?</span></div>
       </div>
     </div>
   </section>
@@ -728,19 +864,20 @@ footer{
   <section class="section" id="lineas">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Líneas de investigación</span>
-        <h2>Ocho frentes de trabajo.</h2>
+        <span class="eyebrow"><span data-l="es">Líneas de investigación</span><span data-l="en">Research lines</span></span>
+        <h2><span data-l="es">Ocho frentes de trabajo.</span><span data-l="en">Eight lines of work.</span></h2>
       </div>
-      <p style="color:var(--fg-muted);max-width:60ch;margin-bottom:18px;">Para el trabajo de simulación, el semillero combina software comercial (Ansys) con herramientas de código abierto (OpenFOAM), según las necesidades de cada proyecto.</p>
+      <p style="color:var(--fg-muted);max-width:60ch;margin-bottom:18px;" data-l="es">Para el trabajo de simulación, el semillero combina software comercial (Ansys) con herramientas de código abierto (OpenFOAM), según las necesidades de cada proyecto.</p>
+      <p style="color:var(--fg-muted);max-width:60ch;margin-bottom:18px;" data-l="en">For simulation work, the group combines commercial software (Ansys) with open-source tools (OpenFOAM), depending on what each project needs.</p>
       <div class="tag-grid">
-        <span class="tag-pill">Modelado de dinámica de fluidos</span>
-        <span class="tag-pill">Ventilación en recintos cerrados</span>
-        <span class="tag-pill">Generación de energía</span>
-        <span class="tag-pill">Análisis y diseño de turbomaquinaria</span>
-        <span class="tag-pill">Estudio de hidrodinámica</span>
-        <span class="tag-pill">Estudio de aerodinámica</span>
-        <span class="tag-pill">Dinámica de fluidos computacional (CFD)</span>
-        <span class="tag-pill">Modelado de sistemas térmicos</span>
+        <span class="tag-pill"><span data-l="es">Modelado de dinámica de fluidos</span><span data-l="en">Fluid dynamics modeling</span></span>
+        <span class="tag-pill"><span data-l="es">Ventilación en recintos cerrados</span><span data-l="en">Ventilation of enclosed spaces</span></span>
+        <span class="tag-pill"><span data-l="es">Generación de energía</span><span data-l="en">Power generation</span></span>
+        <span class="tag-pill"><span data-l="es">Análisis y diseño de turbomaquinaria</span><span data-l="en">Turbomachinery analysis and design</span></span>
+        <span class="tag-pill"><span data-l="es">Estudio de hidrodinámica</span><span data-l="en">Hydrodynamics</span></span>
+        <span class="tag-pill"><span data-l="es">Estudio de aerodinámica</span><span data-l="en">Aerodynamics</span></span>
+        <span class="tag-pill"><span data-l="es">Dinámica de fluidos computacional (CFD)</span><span data-l="en">Computational fluid dynamics (CFD)</span></span>
+        <span class="tag-pill"><span data-l="es">Modelado de sistemas térmicos</span><span data-l="en">Thermal systems modeling</span></span>
       </div>
     </div>
   </section>
@@ -750,77 +887,82 @@ footer{
   <section class="section" id="proyectos">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Proyectos</span>
-        <h2>De la ventilación anti-Covid a la energía eólica.</h2>
-        <p class="max-prose" style="color:var(--fg-muted)">Tres convocatorias, tres generaciones de integrantes, una misma línea: llevar un problema real al modelo, al prototipo y a la validación experimental.</p>
+        <span class="eyebrow"><span data-l="es">Proyectos</span><span data-l="en">Projects</span></span>
+        <h2><span data-l="es">De la ventilación anti-Covid a la energía eólica.</span><span data-l="en">From anti-COVID ventilation to wind energy.</span></h2>
+        <p class="max-prose" style="color:var(--fg-muted)" data-l="es">Tres convocatorias, tres generaciones de integrantes, una misma línea: llevar un problema real al modelo, al prototipo y a la validación experimental.</p>
+        <p class="max-prose" style="color:var(--fg-muted)" data-l="en">Three funding calls and three generations of members have followed the same path: take a real problem to a model, then to a prototype, then to experimental validation.</p>
       </div>
 
       <div class="timeline">
         <div class="timeline-item">
           <div class="timeline-head">
             <span class="timeline-year">2021 – 2022</span>
-            <span class="status-chip">Finalizado</span>
+            <span class="status-chip"><span data-l="es">Finalizado</span><span data-l="en">Completed</span></span>
           </div>
-          <h3>Sistema de ventilación y control para la disminución de riesgo de contagio de Covid-19</h3>
-          <span class="src">Convocatoria de Innovación "Soluciones con ingenio para el cambio" — Facultad de Ingeniería, 2020</span>
+          <h3><span data-l="es">Sistema de ventilación y control para la disminución de riesgo de contagio de Covid-19</span><span data-l="en">Ventilation and control system to reduce the risk of COVID-19 infection</span></h3>
+          <span class="src"><span data-l="es">Convocatoria de Innovación "Soluciones con ingenio para el cambio" — Facultad de Ingeniería, 2020</span><span data-l="en">Innovation call "Soluciones con ingenio para el cambio", Faculty of Engineering, 2020</span></span>
         </div>
 
         <div class="timeline-item">
           <div class="timeline-head">
             <span class="timeline-year">2022 – 2023</span>
-            <span class="status-chip">Finalizado</span>
+            <span class="status-chip"><span data-l="es">Finalizado</span><span data-l="en">Completed</span></span>
           </div>
-          <h3>Sistema de ventilación, control y simulación para disminuir la transmisión de enfermedades por aerosoles en espacios cerrados</h3>
-          <span class="src">Convocatoria UN Ingnova "Soluciones con ingenio para el cambio", proyecto código 53772 — Convocatoria de Proyectos para el Fortalecimiento de la Innovación en la UNAL: Prototipos y Experiencias Piloto 2019–2021 (segunda cohorte)</span>
-          <p style="margin-top:10px;color:var(--fg-muted);font-size:0.95rem;">Un sistema de ductos, extracción y sensores de CO₂ que reduce el riesgo de contagio por aerosoles en salones cerrados sin recircular el aire, validado con simulación CFD y probado en el salón 115 del edificio 453.</p>
+          <h3><span data-l="es">Sistema de ventilación, control y simulación para disminuir la transmisión de enfermedades por aerosoles en espacios cerrados</span><span data-l="en">Ventilation, control and simulation system to reduce airborne disease transmission in enclosed spaces</span></h3>
+          <span class="src"><span data-l="es">Convocatoria UN Ingnova "Soluciones con ingenio para el cambio", proyecto código 53772 — Convocatoria de Proyectos para el Fortalecimiento de la Innovación en la UNAL: Prototipos y Experiencias Piloto 2019–2021 (segunda cohorte)</span><span data-l="en">UN Ingnova call "Soluciones con ingenio para el cambio", project code 53772. Call for Projects to Strengthen Innovation at UNAL: Prototypes and Pilot Experiences 2019–2021 (second cohort)</span></span>
+          <p style="margin-top:10px;color:var(--fg-muted);font-size:0.95rem;" data-l="es">Un sistema de ductos, extracción y sensores de CO₂ que reduce el riesgo de contagio por aerosoles en salones cerrados sin recircular el aire, validado con simulación CFD y probado en el salón 115 del edificio 453.</p>
+          <p style="margin-top:10px;color:var(--fg-muted);font-size:0.95rem;" data-l="en">A system of ducts, air extraction and CO₂ sensors that lowers the risk of airborne infection in closed classrooms without recirculating air. It was validated with CFD simulation and tested in room 115 of building 453.</p>
 
           <div class="media-block">
-            <span class="cap">Diseño del sistema</span>
+            <span class="cap"><span data-l="es">Diseño del sistema</span><span data-l="en">System design</span></span>
             <div class="proj-media">
               <figure>
-                <img src="img/diagrama-sistema.jpg" alt="Diagrama del sistema de ductos: tubo central, tubos auxiliares, campanas, dampers, acople y extractor">
-                <figcaption>Campanas, ductos y extractor</figcaption>
+                <img src="img/diagrama-sistema.jpg" loading="lazy" decoding="async" alt="Diagrama del sistema de ductos: tubo central, tubos auxiliares, campanas, dampers, acople y extractor" data-alt-en="Diagram of the duct system: central duct, auxiliary ducts, hoods, dampers, coupling and extractor">
+                <figcaption><span data-l="es">Campanas, ductos y extractor</span><span data-l="en">Hoods, ducts and extractor</span></figcaption>
               </figure>
               <figure>
-                <img src="img/render-sensores-aula.jpg" alt="Render del aula con sensores de CO2, anemómetro y monitor de visualización señalados">
-                <figcaption>Sensores CO₂, anemómetro y monitor</figcaption>
+                <img src="img/render-sensores-aula.jpg" loading="lazy" decoding="async" alt="Render del aula con sensores de CO2, anemómetro y monitor de visualización señalados" data-alt-en="Render of the classroom with the CO2 sensors, anemometer and display monitor labeled">
+                <figcaption><span data-l="es">Sensores CO₂, anemómetro y monitor</span><span data-l="en">CO₂ sensors, anemometer and monitor</span></figcaption>
               </figure>
               <figure>
-                <img src="img/ductos-taller.jpg" alt="Fotografía real de los ductos metálicos del sistema, almacenados en el taller antes del montaje">
-                <figcaption>Ductos del sistema, en taller</figcaption>
+                <img src="img/ductos-taller.jpg" loading="lazy" decoding="async" alt="Fotografía real de los ductos metálicos del sistema, almacenados en el taller antes del montaje" data-alt-en="Photo of the system's metal ducts stored in the workshop before installation">
+                <figcaption><span data-l="es">Ductos del sistema, en taller</span><span data-l="en">System ducts in the workshop</span></figcaption>
               </figure>
             </div>
           </div>
 
           <div class="media-block">
-            <span class="cap">Resultados de la simulación CFD — comportamiento del aire en el aula</span>
+            <span class="cap"><span data-l="es">Resultados de la simulación CFD — comportamiento del aire en el aula</span><span data-l="en">CFD simulation results: airflow in the classroom</span></span>
             <div class="proj-media">
               <figure>
-                <img src="img/cfd-aula-velocidad.jpg" alt="Contorno CFD del campo de velocidad del aire en el aula de clase">
-                <figcaption>Campo de velocidad en el aula</figcaption>
+                <img src="img/cfd-aula-velocidad.jpg" loading="lazy" decoding="async" alt="Contorno CFD del campo de velocidad del aire en el aula de clase" data-alt-en="CFD contour of the air velocity field in the classroom">
+                <figcaption><span data-l="es">Campo de velocidad en el aula</span><span data-l="en">Velocity field in the classroom</span></figcaption>
               </figure>
               <figure>
-                <img src="img/cfd-aula-temperatura.jpg" alt="Contornos de temperatura estática en dos planos del aula, a 0.4 m y 1 m de altura">
-                <figcaption>Temperatura estática, dos planos</figcaption>
+                <img src="img/cfd-aula-temperatura.jpg" loading="lazy" decoding="async" alt="Contornos de temperatura estática en dos planos del aula, a 0.4 m y 1 m de altura" data-alt-en="Static temperature contours on two classroom planes, at 0.4 m and 1 m height">
+                <figcaption><span data-l="es">Temperatura estática, dos planos</span><span data-l="en">Static temperature, two planes</span></figcaption>
               </figure>
               <figure>
-                <img src="img/cfd-aula-streamlines.jpg" alt="Líneas de corriente 3D del aire alrededor de los puestos del aula">
-                <figcaption>Líneas de corriente, vista 3D</figcaption>
+                <img src="img/cfd-aula-streamlines.jpg" loading="lazy" decoding="async" alt="Líneas de corriente 3D del aire alrededor de los puestos del aula" data-alt-en="3D streamlines of the air around the classroom seats">
+                <figcaption><span data-l="es">Líneas de corriente, vista 3D</span><span data-l="en">Streamlines, 3D view</span></figcaption>
               </figure>
             </div>
           </div>
 
           <div class="credit-line">
-            <b>Equipo — Informe de Avance II, 2022-1:</b> Carlos Mario Morales Ramírez, Cristian Alejandro Castrillón Ayala, Jorge Andrés León Valbuena, Juan Pablo Ariza Hernández, Julián Santiago Serrano Rincón, Nicolás David Ávila-Rey, Sara Valentina García Martínez y Sofía Holguín Briceño.<br>
-            Profesor asesor: Aldo Germán Benavides Morán.
+            <span data-l="es"><b>Equipo — Informe de Avance II, 2022-1:</b> Carlos Mario Morales Ramírez, Cristian Alejandro Castrillón Ayala, Jorge Andrés León Valbuena, Juan Pablo Ariza Hernández, Julián Santiago Serrano Rincón, Nicolás David Ávila-Rey, Sara Valentina García Martínez y Sofía Holguín Briceño.<br>
+            Profesor asesor: Aldo Germán Benavides Morán.</span>
+            <span data-l="en"><b>Team, Progress Report II, 2022-1:</b> Carlos Mario Morales Ramírez, Cristian Alejandro Castrillón Ayala, Jorge Andrés León Valbuena, Juan Pablo Ariza Hernández, Julián Santiago Serrano Rincón, Nicolás David Ávila-Rey, Sara Valentina García Martínez and Sofía Holguín Briceño.<br>
+            Faculty advisor: Aldo Germán Benavides Morán.</span>
           </div>
 
           <div class="spinoff-card">
-            <img src="img/ventus-mockup.jpg" alt="Mockup de la página web de Ventus, protocolo de medición y certificación de calidad del aire derivado del proyecto">
+            <img src="img/ventus-mockup.jpg" loading="lazy" decoding="async" alt="Mockup de la página web de Ventus, protocolo de medición y certificación de calidad del aire derivado del proyecto" data-alt-en="Mockup of the Ventus website, the air quality measurement and certification protocol that came out of the project">
             <div class="spinoff-body">
-              <span class="label" style="margin-bottom:0;">De la investigación al emprendimiento</span>
+              <span class="label" style="margin-bottom:0;"><span data-l="es">De la investigación al emprendimiento</span><span data-l="en">From research to a startup</span></span>
               <h3>Ventus</h3>
-              <p>Bajo el programa UN Ingnova, el equipo desarrolló <b style="color:var(--fg)">Ventus</b>: un protocolo de medición, certificación y acondicionamiento de aire basado en las mismas simulaciones computacionales del proyecto, pensado para escalar la solución a aulas, oficinas y locales comerciales. La imagen muestra la primera iteración del sitio del proyecto, diseñada durante la fase de validación de modelo de negocio.</p>
+              <p data-l="es">Bajo el programa UN Ingnova, el equipo desarrolló <b style="color:var(--fg)">Ventus</b>: un protocolo de medición, certificación y acondicionamiento de aire basado en las mismas simulaciones computacionales del proyecto, pensado para escalar la solución a aulas, oficinas y locales comerciales. La imagen muestra la primera iteración del sitio del proyecto, diseñada durante la fase de validación de modelo de negocio.</p>
+              <p data-l="en">Under the UN Ingnova program, the team developed <b style="color:var(--fg)">Ventus</b>, a protocol to measure, certify and condition indoor air. It uses the same computational simulations as the project and was meant to take the solution to classrooms, offices and shops. The image shows the first version of the project's website, designed during the business model validation phase.</p>
             </div>
           </div>
         </div>
@@ -828,36 +970,37 @@ footer{
         <div class="timeline-item is-active">
           <div class="timeline-head">
             <span class="timeline-year">2025 – 2026</span>
-            <span class="status-chip active">En curso</span>
+            <span class="status-chip active"><span data-l="es">En curso</span><span data-l="en">Ongoing</span></span>
           </div>
-          <h3>Caracterización y puesta a punto de una turbina eólica Savonius-Darrieus para generación de energía renovable en el campus</h3>
-          <span class="src">Convocatoria de Proyectos de Investigación de la Facultad de Ingeniería, 2025</span>
-          <p style="margin-top:10px;color:var(--fg-muted);font-size:0.95rem;">Trabajo experimental: ensayos en túnel de viento, escaneo de geometrías, impresión 3D y simulación en Ansys.</p>
+          <h3><span data-l="es">Caracterización y puesta a punto de una turbina eólica Savonius-Darrieus para generación de energía renovable en el campus</span><span data-l="en">Characterization and tuning of a Savonius-Darrieus wind turbine for renewable power generation on campus</span></h3>
+          <span class="src"><span data-l="es">Convocatoria de Proyectos de Investigación de la Facultad de Ingeniería, 2025</span><span data-l="en">Faculty of Engineering research projects call, 2025</span></span>
+          <p style="margin-top:10px;color:var(--fg-muted);font-size:0.95rem;" data-l="es">Trabajo experimental: ensayos en túnel de viento, escaneo de geometrías, impresión 3D y simulación en Ansys.</p>
+          <p style="margin-top:10px;color:var(--fg-muted);font-size:0.95rem;" data-l="en">Experimental work: wind tunnel tests, geometry scanning, 3D printing and simulation in Ansys.</p>
           <div class="proj-media">
             <figure>
-              <img src="img/turbina-tunel-viento.jpg" alt="Prototipo de turbina Savonius-Darrieus iluminado en verde dentro del túnel de viento">
-              <figcaption>Ensayo en túnel de viento</figcaption>
+              <img src="img/turbina-tunel-viento.jpg" loading="lazy" decoding="async" alt="Prototipo de turbina Savonius-Darrieus iluminado en verde dentro del túnel de viento" data-alt-en="Savonius-Darrieus turbine prototype lit in green inside the wind tunnel">
+              <figcaption><span data-l="es">Ensayo en túnel de viento</span><span data-l="en">Wind tunnel test</span></figcaption>
             </figure>
             <figure>
-              <img src="img/cfd-simulacion.jpg" alt="Simulación CFD en Ansys mostrando el campo de velocidad alrededor de la turbina">
-              <figcaption>Campo de velocidad · CFD en Ansys</figcaption>
+              <img src="img/cfd-simulacion.jpg" loading="lazy" decoding="async" alt="Simulación CFD en Ansys mostrando el campo de velocidad alrededor de la turbina" data-alt-en="Ansys CFD simulation of the velocity field around the turbine">
+              <figcaption><span data-l="es">Campo de velocidad · CFD en Ansys</span><span data-l="en">Velocity field · CFD in Ansys</span></figcaption>
             </figure>
             <figure>
-              <img src="img/turbina-campus.jpg" alt="Turbina ensayada al aire libre en el campus">
-              <figcaption>Prototipo a escala real, campus UNAL</figcaption>
+              <img src="img/turbina-campus.jpg" loading="lazy" decoding="async" alt="Turbina ensayada al aire libre en el campus" data-alt-en="Turbine tested outdoors on campus">
+              <figcaption><span data-l="es">Prototipo a escala real, campus UNAL</span><span data-l="en">Full-scale prototype, UNAL campus</span></figcaption>
             </figure>
           </div>
 
           <div class="media-block">
-            <span class="cap">Simulación CFD en movimiento — ANSYS</span>
+            <span class="cap"><span data-l="es">Simulación CFD en movimiento — ANSYS</span><span data-l="en">CFD simulation in motion · ANSYS</span></span>
             <div class="video-grid">
               <figure class="video-figure">
                 <video src="video/turbina-cfd.mp4" poster="img/turbina-cfd-poster.jpg" controls muted loop playsinline preload="metadata"></video>
-                <figcaption>Superficie de iso-velocidad alrededor de los álabes en rotación</figcaption>
+                <figcaption><span data-l="es">Superficie de iso-velocidad alrededor de los álabes en rotación</span><span data-l="en">Iso-velocity surface around the rotating blades</span></figcaption>
               </figure>
               <figure class="video-figure">
                 <video src="video/turbina-vortices-cfd.mp4" poster="img/turbina-vortices-poster.jpg" controls muted loop playsinline preload="metadata"></video>
-                <figcaption>Desprendimiento de vórtices, corte 2D del rotor</figcaption>
+                <figcaption><span data-l="es">Desprendimiento de vórtices, corte 2D del rotor</span><span data-l="en">Vortex shedding, 2D section of the rotor</span></figcaption>
               </figure>
             </div>
           </div>
@@ -871,30 +1014,31 @@ footer{
   <section class="section" id="laboratorios">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Infraestructura</span>
-        <h2>Laboratorios y herramientas.</h2>
-        <p class="max-prose" style="color:var(--fg-muted)">FLUMEX tiene registro activo en dos laboratorios de la Facultad de Ingeniería, además del instrumental de diseño y cómputo que usa en sus proyectos.</p>
+        <span class="eyebrow"><span data-l="es">Infraestructura</span><span data-l="en">Facilities</span></span>
+        <h2><span data-l="es">Laboratorios y herramientas.</span><span data-l="en">Labs and tools.</span></h2>
+        <p class="max-prose" style="color:var(--fg-muted)" data-l="es">FLUMEX tiene registro activo en dos laboratorios de la Facultad de Ingeniería, además del instrumental de diseño y cómputo que usa en sus proyectos.</p>
+        <p class="max-prose" style="color:var(--fg-muted)" data-l="en">FLUMEX is registered in two labs of the Faculty of Engineering and also uses design and computing equipment in its projects.</p>
       </div>
       <dl class="spec-list card">
         <div class="spec-row">
-          <dt>Ensayos Hidráulicos (LEH)</dt>
-          <dd><b>Túnel de viento de circuito cerrado.</b> Caracterización del perfil de velocidad y pruebas con modelos.</dd>
+          <dt><span data-l="es">Ensayos Hidráulicos (LEH)</span><span data-l="en">Hydraulic Testing Lab (LEH)</span></dt>
+          <dd><span data-l="es"><b>Túnel de viento de circuito cerrado.</b> Caracterización del perfil de velocidad y pruebas con modelos.</span><span data-l="en"><b>Closed-circuit wind tunnel.</b> Velocity profile characterization and model testing.</span></dd>
         </div>
         <div class="spec-row">
-          <dt>Transferencia de Calor</dt>
-          <dd>Prácticas y ensayos de ciencias térmicas, en apoyo a los proyectos de generación y transformación de energía del semillero.</dd>
+          <dt><span data-l="es">Transferencia de Calor</span><span data-l="en">Heat Transfer Lab</span></dt>
+          <dd><span data-l="es">Prácticas y ensayos de ciencias térmicas, en apoyo a los proyectos de generación y transformación de energía del semillero.</span><span data-l="en">Thermal science practice and testing for the group's energy generation and conversion projects.</span></dd>
         </div>
         <div class="spec-row">
-          <dt>Diseño de Máquinas y Prototipos</dt>
-          <dd><b>Túnel de viento de circuito abierto.</b> Pruebas con modelos a escala y visualización de flujo.</dd>
+          <dt><span data-l="es">Diseño de Máquinas y Prototipos</span><span data-l="en">Machine Design and Prototyping Lab</span></dt>
+          <dd><span data-l="es"><b>Túnel de viento de circuito abierto.</b> Pruebas con modelos a escala y visualización de flujo.</span><span data-l="en"><b>Open-circuit wind tunnel.</b> Scale model testing and flow visualization.</span></dd>
         </div>
         <div class="spec-row">
-          <dt>Metrología Dimensional de Precisión</dt>
-          <dd><b>Escaneo de geometrías</b> para la elaboración de modelos a escala.</dd>
+          <dt><span data-l="es">Metrología Dimensional de Precisión</span><span data-l="en">Precision Dimensional Metrology Lab</span></dt>
+          <dd><span data-l="es"><b>Escaneo de geometrías</b> para la elaboración de modelos a escala.</span><span data-l="en"><b>Geometry scanning</b> to build scale models.</span></dd>
         </div>
         <div class="spec-row">
-          <dt>Herramientas de cómputo y manufactura</dt>
-          <dd><b>Impresora 3D</b> (modelado por deposición fundida) y <b>workstation con licencia Ansys Research</b> (desde 2020).</dd>
+          <dt><span data-l="es">Herramientas de cómputo y manufactura</span><span data-l="en">Computing and manufacturing tools</span></dt>
+          <dd><span data-l="es"><b>Impresora 3D</b> (modelado por deposición fundida) y <b>workstation con licencia Ansys Research</b> (desde 2020).</span><span data-l="en"><b>3D printer</b> (fused deposition modeling) and a <b>workstation with an Ansys Research license</b> (since 2020).</span></dd>
         </div>
       </dl>
     </div>
@@ -903,40 +1047,45 @@ footer{
   <section class="section" id="metodologia">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Cómo trabajamos</span>
-        <h2>Reuniones, roles y convocatorias.</h2>
+        <span class="eyebrow"><span data-l="es">Cómo trabajamos</span><span data-l="en">How we work</span></span>
+        <h2><span data-l="es">Reuniones, roles y convocatorias.</span><span data-l="en">Meetings, roles and calls.</span></h2>
       </div>
 
       <div class="grid-2">
         <div class="card">
-          <span class="label">Ritmo semanal</span>
-          <p style="color:var(--fg)">Dos reuniones semanales: una interna entre integrantes y otra en conjunto con el profesor director, para revisar avances y coordinar tareas.</p>
+          <span class="label"><span data-l="es">Ritmo semanal</span><span data-l="en">Weekly schedule</span></span>
+          <p style="color:var(--fg)" data-l="es">Dos reuniones semanales: una interna entre integrantes y otra en conjunto con el profesor director, para revisar avances y coordinar tareas.</p>
+          <p style="color:var(--fg)" data-l="en">Two meetings a week: one among members and one with the faculty director, to review progress and coordinate tasks.</p>
         </div>
         <div class="card">
-          <span class="label">Vinculación</span>
-          <p style="color:var(--fg)">Convocatorias durante el primer mes y medio de cada semestre, con un periodo de prueba para los nuevos integrantes.</p>
+          <span class="label"><span data-l="es">Vinculación</span><span data-l="en">Joining</span></span>
+          <p style="color:var(--fg)" data-l="es">Convocatorias durante el primer mes y medio de cada semestre, con un periodo de prueba para los nuevos integrantes.</p>
+          <p style="color:var(--fg)" data-l="en">Calls for new members run during the first month and a half of each semester, with a trial period for newcomers.</p>
         </div>
       </div>
 
       <div class="role-grid" style="margin-top:20px;">
         <div class="card">
           <span class="num">01</span>
-          <h3>Líder</h3>
-          <p>Unifica los puntos de vista del equipo, media las diferencias de opinión y mantiene el entusiasmo sobre las tareas.</p>
+          <h3><span data-l="es">Líder</span><span data-l="en">Leader</span></h3>
+          <p data-l="es">Unifica los puntos de vista del equipo, media las diferencias de opinión y mantiene el entusiasmo sobre las tareas.</p>
+          <p data-l="en">Brings the team's views together, mediates disagreements and keeps people motivated about the work.</p>
         </div>
         <div class="card">
           <span class="num">02</span>
-          <h3>Moderador</h3>
-          <p>Coordina cada reunión, otorga la palabra y dirige la discusión de forma organizada. El rol rota entre integrantes.</p>
+          <h3><span data-l="es">Moderador</span><span data-l="en">Moderator</span></h3>
+          <p data-l="es">Coordina cada reunión, otorga la palabra y dirige la discusión de forma organizada. El rol rota entre integrantes.</p>
+          <p data-l="en">Runs each meeting, gives the floor and keeps the discussion organized. The role rotates among members.</p>
         </div>
         <div class="card">
           <span class="num">03</span>
-          <h3>Secretario</h3>
-          <p>Redacta el acta de cada reunión y lleva el registro de asistencia del grupo.</p>
+          <h3><span data-l="es">Secretario</span><span data-l="en">Secretary</span></h3>
+          <p data-l="es">Redacta el acta de cada reunión y lleva el registro de asistencia del grupo.</p>
+          <p data-l="en">Writes the minutes of each meeting and keeps the group's attendance record.</p>
         </div>
       </div>
 
-      <div class="note-block" style="margin-top:20px;">Difusión: FLUMEX organiza charlas y webinars una o dos veces por semestre para compartir los resultados de sus proyectos y fomentar el interés por las ciencias térmicas.</div>
+      <div class="note-block" style="margin-top:20px;"><span data-l="es">Difusión: FLUMEX organiza charlas y webinars una o dos veces por semestre para compartir los resultados de sus proyectos y fomentar el interés por las ciencias térmicas.</span><span data-l="en">Outreach: FLUMEX holds talks and webinars once or twice a semester to share project results and build interest in thermal sciences.</span></div>
     </div>
   </section>
 
@@ -946,130 +1095,130 @@ footer{
   <section class="section" id="integrantes">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Estudiantes activos</span>
-        <h2>Quién hace parte del semillero.</h2>
+        <span class="eyebrow"><span data-l="es">Estudiantes activos</span><span data-l="en">Active students</span></span>
+        <h2><span data-l="es">Quién hace parte del semillero.</span><span data-l="en">Who is part of the group.</span></h2>
       </div>
 
       <div class="person-card">
-        <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.3rem;color:var(--accent);">AB</div>
+        <div class="avatar badge lg" aria-hidden="true">AB</div>
         <div>
           <h3>Aldo Germán Benavides Moran</h3>
-          <span class="person-role">Profesor director · Depto. de Ingeniería Mecánica y Mecatrónica</span>
+          <span class="person-role"><span data-l="es">Profesor director · Depto. de Ingeniería Mecánica y Mecatrónica</span><span data-l="en">Faculty director · Dept. of Mechanical and Mechatronics Engineering</span></span>
           <span class="person-mail">agbenavidesm@unal.edu.co</span>
         </div>
       </div>
 
       <div class="grid-3" style="margin-top:20px;">
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">IG</div>
+          <div class="avatar badge" aria-hidden="true">IG</div>
           <div>
             <h3>Isabella Gutiérrez Ávila</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Trabajo experimental en el laboratorio de hidráulica y el túnel de viento.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Trabajo experimental en el laboratorio de hidráulica y el túnel de viento.</span><span data-l="en">Experimental work in the hydraulics lab and the wind tunnel.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">JP</div>
+          <div class="avatar badge" aria-hidden="true">JP</div>
           <div>
             <h3>Juan David Pardo Aragón</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Trabajo experimental en túnel de viento. Desarrollo y prueba de sensores y componentes electrónicos.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Trabajo experimental en túnel de viento. Desarrollo y prueba de sensores y componentes electrónicos.</span><span data-l="en">Experimental work in the wind tunnel. Development and testing of sensors and electronic components.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">JJ</div>
+          <div class="avatar badge" aria-hidden="true">JJ</div>
           <div>
             <h3>Juan José Jaramillo Casanova</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Manufactura de modelos a escala.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Manufactura de modelos a escala.</span><span data-l="en">Manufacturing of scale models.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">JG</div>
+          <div class="avatar badge" aria-hidden="true">JG</div>
           <div>
             <h3>Juan Manuel Gómez Galvis</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Trabajo experimental en laboratorio. Desarrollo de planos y modelos a escala.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Trabajo experimental en laboratorio. Desarrollo de planos y modelos a escala.</span><span data-l="en">Experimental lab work. Technical drawings and scale models.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">JN</div>
+          <div class="avatar badge" aria-hidden="true">JN</div>
           <div>
             <h3>Juan Sebastián Niño Perico</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Modelado computacional en CFD.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Modelado computacional en CFD.</span><span data-l="en">Computational modeling in CFD.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">MM</div>
+          <div class="avatar badge" aria-hidden="true">MM</div>
           <div>
             <h3>Manuel Alejandro Maya León</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Trabajo experimental en el túnel de viento del laboratorio de hidráulica. Elaboración de modelos a escala.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Trabajo experimental en el túnel de viento del laboratorio de hidráulica. Elaboración de modelos a escala.</span><span data-l="en">Experimental work in the hydraulics lab wind tunnel. Building scale models.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">OZ</div>
+          <div class="avatar badge" aria-hidden="true">OZ</div>
           <div>
             <h3>Omar Santiago Zuleta Romero</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Modelos computacionales de la fluido-dinámica de turbomaquinaria. Apoyo en tareas experimentales.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Modelos computacionales de la fluido-dinámica de turbomaquinaria. Apoyo en tareas experimentales.</span><span data-l="en">Computational models of turbomachinery fluid dynamics. Support with experimental tasks.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">SR</div>
+          <div class="avatar badge" aria-hidden="true">SR</div>
           <div>
             <h3>Santiago Alejandro Ramírez Cepeda</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Montajes en el laboratorio de hidráulica. Caracterización de turbomaquinaria.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Montajes en el laboratorio de hidráulica. Caracterización de turbomaquinaria.</span><span data-l="en">Test setups in the hydraulics lab. Turbomachinery characterization.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">SV</div>
+          <div class="avatar badge" aria-hidden="true">SV</div>
           <div>
             <h3>Sofía Vera Acosta</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Diseño y fabricación de piezas. Trabajo experimental en túnel de viento. Elaboración de informes técnicos.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Diseño y fabricación de piezas. Trabajo experimental en túnel de viento. Elaboración de informes técnicos.</span><span data-l="en">Part design and manufacturing. Experimental work in the wind tunnel. Technical reports.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">AD</div>
+          <div class="avatar badge" aria-hidden="true">AD</div>
           <div>
             <h3>Andrés Felipe Delgadillo Lozano</h3>
-            <span class="person-role">Integrante nuevo</span>
-            <span class="person-activity">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo. Interesado en aportar en tareas de CFD y aerodinámica.</span>
+            <span class="person-role"><span data-l="es">Integrante nuevo</span><span data-l="en">New member</span></span>
+            <span class="person-activity"><span data-l="es">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo. Interesado en aportar en tareas de CFD y aerodinámica.</span><span data-l="en">Supports several of the group's projects while the work areas are being organized. Interested in contributing to CFD and aerodynamics work.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">JQ</div>
+          <div class="avatar badge" aria-hidden="true">JQ</div>
           <div>
             <h3>Juan Carlos Quiroga Candela</h3>
-            <span class="person-role">Integrante nuevo</span>
-            <span class="person-activity">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo.</span>
+            <span class="person-role"><span data-l="es">Integrante nuevo</span><span data-l="en">New member</span></span>
+            <span class="person-activity"><span data-l="es">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo.</span><span data-l="en">Supports several of the group's projects while the work areas are being organized.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">JM</div>
+          <div class="avatar badge" aria-hidden="true">JM</div>
           <div>
             <h3>José Esteban Mendieta Merchán</h3>
-            <span class="person-role">Integrante nuevo</span>
-            <span class="person-activity">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo.</span>
+            <span class="person-role"><span data-l="es">Integrante nuevo</span><span data-l="en">New member</span></span>
+            <span class="person-activity"><span data-l="es">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo.</span><span data-l="en">Supports several of the group's projects while the work areas are being organized.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">LR</div>
+          <div class="avatar badge" aria-hidden="true">LR</div>
           <div>
             <h3>Laura Sofía Ruiz Constante</h3>
-            <span class="person-role">Integrante nuevo</span>
-            <span class="person-activity">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo.</span>
+            <span class="person-role"><span data-l="es">Integrante nuevo</span><span data-l="en">New member</span></span>
+            <span class="person-activity"><span data-l="es">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo.</span><span data-l="en">Supports several of the group's projects while the work areas are being organized.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">TM</div>
+          <div class="avatar badge" aria-hidden="true">TM</div>
           <div>
             <h3>Tito Samuel Méndez Orjuela</h3>
-            <span class="person-role">Integrante nuevo</span>
-            <span class="person-activity">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo.</span>
+            <span class="person-role"><span data-l="es">Integrante nuevo</span><span data-l="en">New member</span></span>
+            <span class="person-activity"><span data-l="es">Apoyo en varios proyectos del semillero mientras se organizan los frentes de trabajo.</span><span data-l="en">Supports several of the group's projects while the work areas are being organized.</span></span>
           </div>
         </div>
       </div>
@@ -1079,46 +1228,47 @@ footer{
   <section class="section" id="huella">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Trayectoria</span>
-        <h2>Estudiantes que han dejado huella.</h2>
+        <span class="eyebrow"><span data-l="es">Trayectoria</span><span data-l="en">Track record</span></span>
+        <h2><span data-l="es">Estudiantes que han dejado huella.</span><span data-l="en">Students who left their mark.</span></h2>
       </div>
 
       <div class="grid-3">
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">AR</div>
+          <div class="avatar badge" aria-hidden="true">AR</div>
           <div>
             <h3>Andrés Camilo Ricaurte Abadía</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Apoyo en ensayos de túnel de viento y simulaciones computacionales de dinámica de fluidos.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Apoyo en ensayos de túnel de viento y simulaciones computacionales de dinámica de fluidos.</span><span data-l="en">Support with wind tunnel tests and computational fluid dynamics simulations.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">CK</div>
+          <div class="avatar badge" aria-hidden="true">CK</div>
           <div>
             <h3>Carlos Iván Kryksman Valbuena</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Modelado computacional. Búsqueda de convocatorias.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Modelado computacional. Búsqueda de convocatorias.</span><span data-l="en">Computational modeling. Searching for funding calls.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">CM</div>
+          <div class="avatar badge" aria-hidden="true">CM</div>
           <div>
             <h3>Carlos Mario Morales Ramírez</h3>
-            <span class="person-role">Estudiante de posgrado</span>
-            <span class="person-activity">Apoyo logístico del semillero. Modelado computacional en CFD.</span>
+            <span class="person-role"><span data-l="es">Estudiante de posgrado</span><span data-l="en">Graduate student</span></span>
+            <span class="person-activity"><span data-l="es">Apoyo logístico del semillero. Modelado computacional en CFD.</span><span data-l="en">Logistics support for the group. Computational modeling in CFD.</span></span>
           </div>
         </div>
         <div class="person-card">
-          <div class="avatar badge" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-family:var(--font-body);font-weight:800;font-size:1.15rem;color:var(--accent);">EM</div>
+          <div class="avatar badge" aria-hidden="true">EM</div>
           <div>
             <h3>Eduin Andrés Mejía Rodríguez</h3>
-            <span class="person-role">Estudiante de pregrado</span>
-            <span class="person-activity">Manufactura de modelos a escala. Instrumentación para pruebas de laboratorio.</span>
+            <span class="person-role"><span data-l="es">Estudiante de pregrado</span><span data-l="en">Undergraduate student</span></span>
+            <span class="person-activity"><span data-l="es">Manufactura de modelos a escala. Instrumentación para pruebas de laboratorio.</span><span data-l="en">Manufacturing of scale models. Instrumentation for lab tests.</span></span>
           </div>
         </div>
       </div>
 
-      <p style="color:var(--fg-muted);max-width:70ch;margin-top:28px;margin-bottom:14px;">También hicieron parte del semillero como equipo del proyecto de ventilación anti-COVID:</p>
+      <p style="color:var(--fg-muted);max-width:70ch;margin-top:28px;margin-bottom:14px;" data-l="es">También hicieron parte del semillero como equipo del proyecto de ventilación anti-COVID:</p>
+      <p style="color:var(--fg-muted);max-width:70ch;margin-top:28px;margin-bottom:14px;" data-l="en">Also part of the group, as the team behind the anti-COVID ventilation project:</p>
       <div class="tag-grid">
         <span class="tag-pill">Sofía Holguín-Briceño</span>
         <span class="tag-pill">Jorge Andrés León Valbuena</span>
@@ -1142,25 +1292,29 @@ footer{
   <section class="section" id="articulacion">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Articulación</span>
-        <h2>No trabajamos solos.</h2>
+        <span class="eyebrow"><span data-l="es">Articulación</span><span data-l="en">Partnerships</span></span>
+        <h2><span data-l="es">No trabajamos solos.</span><span data-l="en">We don't work alone.</span></h2>
       </div>
       <div class="grid-2">
         <div class="card">
-          <h3>GNUM — Grupo de modelado y métodos numéricos en ingeniería</h3>
-          <p>FLUMEX está vinculado a GNUM y comparte con el grupo el trabajo en métodos numéricos aplicados a la solución de ecuaciones diferenciales para el modelado de materiales y procesos. El director de FLUMEX, Aldo Germán Benavides Moran, también hace parte de GNUM.</p>
+          <h3><span data-l="es">GNUM — Grupo de modelado y métodos numéricos en ingeniería</span><span data-l="en">GNUM, Modeling and Numerical Methods in Engineering group</span></h3>
+          <p data-l="es">FLUMEX está vinculado a GNUM y comparte con el grupo el trabajo en métodos numéricos aplicados a la solución de ecuaciones diferenciales para el modelado de materiales y procesos. El director de FLUMEX, Aldo Germán Benavides Moran, también hace parte de GNUM.</p>
+          <p data-l="en">FLUMEX is linked to GNUM and shares its work on numerical methods for solving differential equations to model materials and processes. FLUMEX's director, Aldo Germán Benavides Moran, is also a member of GNUM.</p>
         </div>
         <div class="card">
-          <h3>GRIEQUI y OCEÁNICOS — Sede Medellín</h3>
-          <p>Colaboración orientada a formar a los integrantes en tecnologías para el aprovechamiento de la energía oceánica, fortaleciendo el modelado de fluidos y el desarrollo de tecnologías innovadoras entre sedes.</p>
+          <h3><span data-l="es">GRIEQUI y OCEÁNICOS — Sede Medellín</span><span data-l="en">GRIEQUI and OCEÁNICOS, Medellín campus</span></h3>
+          <p data-l="es">Colaboración orientada a formar a los integrantes en tecnologías para el aprovechamiento de la energía oceánica, fortaleciendo el modelado de fluidos y el desarrollo de tecnologías innovadoras entre sedes.</p>
+          <p data-l="en">A collaboration to train members in ocean energy technologies and to strengthen fluid modeling and technology development across campuses.</p>
         </div>
         <div class="card">
-          <h3>PAI+ — Universidad Autónoma de Occidente</h3>
-          <p>Colaboración con el grupo PAI+ de la Universidad Autónoma de Occidente, en Cali.</p>
+          <h3><span data-l="es">PAI+ — Universidad Autónoma de Occidente</span><span data-l="en">PAI+, Universidad Autónoma de Occidente</span></h3>
+          <p data-l="es">Colaboración con el grupo PAI+ de la Universidad Autónoma de Occidente, en Cali.</p>
+          <p data-l="en">Collaboration with the PAI+ group at Universidad Autónoma de Occidente, in Cali.</p>
         </div>
         <div class="card">
-          <h3>Departamento de Ingeniería Mecánica — Universidad de los Andes</h3>
-          <p>Colaboración con el Departamento de Ingeniería Mecánica de la Universidad de los Andes.</p>
+          <h3><span data-l="es">Departamento de Ingeniería Mecánica — Universidad de los Andes</span><span data-l="en">Department of Mechanical Engineering, Universidad de los Andes</span></h3>
+          <p data-l="es">Colaboración con el Departamento de Ingeniería Mecánica de la Universidad de los Andes.</p>
+          <p data-l="en">Collaboration with the Department of Mechanical Engineering at Universidad de los Andes.</p>
         </div>
       </div>
     </div>
@@ -1171,14 +1325,14 @@ footer{
   <section class="section" id="futuro">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Lo que viene</span>
-        <h2>Próximos pasos.</h2>
+        <span class="eyebrow"><span data-l="es">Lo que viene</span><span data-l="en">What's next</span></span>
+        <h2><span data-l="es">Próximos pasos.</span><span data-l="en">Next steps.</span></h2>
       </div>
       <ul class="obj-list card">
-        <li><span class="mark"></span><p>Terminar la caracterización de la turbina Savonius-Darrieus y explorar su integración como fuente de energía renovable en el campus.</p></li>
-        <li><span class="mark"></span><p>Fortalecer la línea de energía oceánica junto con los grupos GRIEQUI y OCEÁNICOS de la sede Medellín.</p></li>
-        <li><span class="mark"></span><p>Mantener al menos un artículo de divulgación científica publicado por año y una presentación en congreso nacional o internacional.</p></li>
-        <li><span class="mark"></span><p>Abrir nuevas convocatorias semestrales para vincular estudiantes a los proyectos en curso y a los que vienen.</p></li>
+        <li><span class="mark"></span><p><span data-l="es">Terminar la caracterización de la turbina Savonius-Darrieus y explorar su integración como fuente de energía renovable en el campus.</span><span data-l="en">Finish characterizing the Savonius-Darrieus turbine and study how to integrate it as a renewable energy source on campus.</span></p></li>
+        <li><span class="mark"></span><p><span data-l="es">Fortalecer la línea de energía oceánica junto con los grupos GRIEQUI y OCEÁNICOS de la sede Medellín.</span><span data-l="en">Strengthen the ocean energy line with the GRIEQUI and OCEÁNICOS groups at the Medellín campus.</span></p></li>
+        <li><span class="mark"></span><p><span data-l="es">Mantener al menos un artículo de divulgación científica publicado por año y una presentación en congreso nacional o internacional.</span><span data-l="en">Publish at least one science outreach article a year and give one talk at a national or international conference.</span></p></li>
+        <li><span class="mark"></span><p><span data-l="es">Abrir nuevas convocatorias semestrales para vincular estudiantes a los proyectos en curso y a los que vienen.</span><span data-l="en">Open a call every semester so students can join current and upcoming projects.</span></p></li>
       </ul>
     </div>
   </section>
@@ -1187,16 +1341,17 @@ footer{
     <div class="wrap grid-2" style="align-items:start;">
       <div>
         <div class="section-head">
-          <span class="eyebrow">Únete</span>
-          <h2>Cómo vincularte a FLUMEX.</h2>
-          <p class="max-prose" style="color:var(--fg-muted)">FLUMEX abre convocatoria para nuevos integrantes cada semestre. Así funciona el proceso.</p>
+          <span class="eyebrow"><span data-l="es">Únete</span><span data-l="en">Join us</span></span>
+          <h2><span data-l="es">Cómo vincularte a FLUMEX.</span><span data-l="en">How to join FLUMEX.</span></h2>
+          <p class="max-prose" style="color:var(--fg-muted)" data-l="es">FLUMEX abre convocatoria para nuevos integrantes cada semestre. Así funciona el proceso.</p>
+          <p class="max-prose" style="color:var(--fg-muted)" data-l="en">FLUMEX opens a call for new members every semester. This is how the process works.</p>
         </div>
       </div>
       <ol class="step-list card">
-        <li><div><b>Postúlate en la convocatoria semestral</b><span>Se abre durante el primer mes y medio de cada semestre.</span></div></li>
-        <li><div><b>Periodo de prueba</b><span>Los nuevos integrantes se integran a las reuniones y proyectos en curso.</span></div></li>
-        <li><div><b>Asiste a las reuniones semanales</b><span>Jueves y viernes, con espacio para presentar avances, proponer proyectos y compartir conocimiento.</span></div></li>
-        <li><div><b>Toma un rol</b><span>Los roles de moderador y secretario rotan entre los integrantes del grupo.</span></div></li>
+        <li><div><b><span data-l="es">Postúlate en la convocatoria semestral</span><span data-l="en">Apply in the semester call</span></b><span class="step-desc"><span data-l="es">Se abre durante el primer mes y medio de cada semestre.</span><span data-l="en">It opens during the first month and a half of each semester.</span></span></div></li>
+        <li><div><b><span data-l="es">Periodo de prueba</span><span data-l="en">Trial period</span></b><span class="step-desc"><span data-l="es">Los nuevos integrantes se integran a las reuniones y proyectos en curso.</span><span data-l="en">New members join the ongoing meetings and projects.</span></span></div></li>
+        <li><div><b><span data-l="es">Asiste a las reuniones semanales</span><span data-l="en">Attend the weekly meetings</span></b><span class="step-desc"><span data-l="es">Jueves y viernes, con espacio para presentar avances, proponer proyectos y compartir conocimiento.</span><span data-l="en">Thursdays and Fridays, with time to present progress, propose projects and share what you know.</span></span></div></li>
+        <li><div><b><span data-l="es">Toma un rol</span><span data-l="en">Take on a role</span></b><span class="step-desc"><span data-l="es">Los roles de moderador y secretario rotan entre los integrantes del grupo.</span><span data-l="en">The moderator and secretary roles rotate among group members.</span></span></div></li>
       </ol>
     </div>
   </section>
@@ -1206,27 +1361,27 @@ footer{
   <section class="section" id="contacto">
     <div class="wrap">
       <div class="section-head">
-        <span class="eyebrow">Contacto</span>
-        <h2>Escríbenos.</h2>
+        <span class="eyebrow"><span data-l="es">Contacto</span><span data-l="en">Contact</span></span>
+        <h2><span data-l="es">Escríbenos.</span><span data-l="en">Write to us.</span></h2>
       </div>
       <div class="contact-row">
         <div>
-          <span class="label" style="margin-bottom:4px;">Contacto general del semillero</span>
+          <span class="label"><span data-l="es">Contacto general del semillero</span><span data-l="en">General contact</span></span>
           <span class="addr">aeroflumex_bog@unal.edu.co</span>
         </div>
-        <button class="copy-btn" data-copy="aeroflumex_bog@unal.edu.co" onclick="copyMail(this)">Copiar correo</button>
+        <button type="button" class="copy-btn" data-copy="aeroflumex_bog@unal.edu.co" onclick="copyMail(this)"><span data-l="es">Copiar correo</span><span data-l="en">Copy email</span></button>
       </div>
       <div class="contact-row">
         <div>
-          <span class="label" style="margin-bottom:4px;">Dirección — Aldo Germán Benavides Moran</span>
+          <span class="label"><span data-l="es">Dirección — Aldo Germán Benavides Moran</span><span data-l="en">Director: Aldo Germán Benavides Moran</span></span>
           <span class="addr">agbenavidesm@unal.edu.co</span>
         </div>
-        <button class="copy-btn" data-copy="agbenavidesm@unal.edu.co" onclick="copyMail(this)">Copiar correo</button>
+        <button type="button" class="copy-btn" data-copy="agbenavidesm@unal.edu.co" onclick="copyMail(this)"><span data-l="es">Copiar correo</span><span data-l="en">Copy email</span></button>
       </div>
       <div class="contact-row">
         <div>
-          <span class="label" style="margin-bottom:4px;">Ubicación</span>
-          <span class="addr" style="font-family:var(--font-body);">Universidad Nacional de Colombia, sede Bogotá — Facultad de Ingeniería, Depto. de Ingeniería Mecánica y Mecatrónica</span>
+          <span class="label"><span data-l="es">Ubicación</span><span data-l="en">Location</span></span>
+          <span class="addr"><span data-l="es">Universidad Nacional de Colombia, sede Bogotá — Facultad de Ingeniería, Depto. de Ingeniería Mecánica y Mecatrónica</span><span data-l="en">Universidad Nacional de Colombia, Bogotá campus. Faculty of Engineering, Department of Mechanical and Mechatronics Engineering</span></span>
         </div>
       </div>
     </div>
@@ -1237,10 +1392,10 @@ footer{
 
 <footer>
   <div class="wrap footer-row">
-    <img src="img/unal-logo-blanco.png" alt="Universidad Nacional de Colombia">
+    <img src="img/unal-logo-blanco.png" alt="Universidad Nacional de Colombia" loading="lazy" decoding="async">
     <div class="footer-meta">
-      FLUMEX · Semillero código 60<br>
-      Facultad de Ingeniería · Sede Bogotá
+      <span data-l="es">FLUMEX · Semillero código 60<br>Facultad de Ingeniería · Sede Bogotá</span>
+      <span data-l="en">FLUMEX · Research group code 60<br>Faculty of Engineering · Bogotá campus</span>
     </div>
   </div>
 </footer>
@@ -1249,11 +1404,12 @@ footer{
 function copyMail(btn){
   var text = btn.getAttribute('data-copy');
   function done(){
-    var original = btn.textContent;
-    btn.textContent = 'Copiado';
+    if(btn.getAttribute('data-copied')){ return; }
+    var original = btn.innerHTML;
+    btn.innerHTML = '<span data-l="es">Copiado</span><span data-l="en">Copied</span>';
     btn.setAttribute('data-copied','true');
     setTimeout(function(){
-      btn.textContent = original;
+      btn.innerHTML = original;
       btn.removeAttribute('data-copied');
     }, 1800);
   }
@@ -1277,67 +1433,146 @@ function copyMail(btn){
 }
 
 (function(){
+  var root = document.documentElement;
+  var main = document.getElementById('top');
+  var nav = document.getElementById('site-nav');
+  var menuBtn = document.querySelector('.menu-btn');
   var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('[data-page]'));
+  var pageLinks = Array.prototype.slice.call(document.querySelectorAll('a[data-page]'));
+  var menuLinks = Array.prototype.slice.call(document.querySelectorAll('nav.links a[data-page]'));
+  var langButtons = Array.prototype.slice.call(document.querySelectorAll('[data-set-lang]'));
+  var altImages = Array.prototype.slice.call(document.querySelectorAll('img[data-alt-en]'));
   var validPages = pages.map(function(p){ return p.getAttribute('data-page'); });
+  var lang = 'es';
+  var current = 'inicio';
 
   var titles = {
-    'inicio': 'FLUMEX',
-    'quienes-somos': 'Quiénes somos · FLUMEX',
-    'proyectos': 'Proyectos · FLUMEX',
-    'laboratorios': 'Laboratorios · FLUMEX',
-    'integrantes': 'Integrantes · FLUMEX',
-    'unete': 'Únete · FLUMEX',
-    'contacto': 'Contacto · FLUMEX'
+    es: {
+      'inicio': 'FLUMEX',
+      'quienes-somos': 'Quiénes somos · FLUMEX',
+      'proyectos': 'Proyectos · FLUMEX',
+      'laboratorios': 'Laboratorios · FLUMEX',
+      'integrantes': 'Integrantes · FLUMEX',
+      'unete': 'Únete · FLUMEX',
+      'contacto': 'Contacto · FLUMEX'
+    },
+    en: {
+      'inicio': 'FLUMEX',
+      'quienes-somos': 'About us · FLUMEX',
+      'proyectos': 'Projects · FLUMEX',
+      'laboratorios': 'Labs · FLUMEX',
+      'integrantes': 'Members · FLUMEX',
+      'unete': 'Join us · FLUMEX',
+      'contacto': 'Contact · FLUMEX'
+    }
   };
 
-  function pathFor(name){
-    return name === 'inicio' ? '/' : '/' + name + '/';
+  // English lives under /en/ (/en/, /en/proyectos/ ...). Spanish keeps the original paths.
+  function pathFor(name, l){
+    var base = name === 'inicio' ? '/' : '/' + name + '/';
+    return l === 'en' ? '/en' + base : base;
   }
-  function nameFromPath(path){
-    var clean = path.replace(/^\/|\/$/g, '');
-    return clean === '' ? 'inicio' : clean;
+  function parsePath(path){
+    var clean = path.replace(/^\/+|\/+$/g, '');
+    var l = 'es';
+    if(clean === 'en' || clean.indexOf('en/') === 0){
+      l = 'en';
+      clean = clean.slice(3);
+    }
+    return { name: clean === '' ? 'inicio' : clean, lang: l };
+  }
+
+  function setLang(l){
+    lang = l === 'en' ? 'en' : 'es';
+    root.setAttribute('lang', lang);
+    langButtons.forEach(function(b){
+      b.setAttribute('aria-pressed', b.getAttribute('data-set-lang') === lang ? 'true' : 'false');
+    });
+    altImages.forEach(function(img){
+      if(!img.hasAttribute('data-alt-es')){ img.setAttribute('data-alt-es', img.getAttribute('alt')); }
+      img.setAttribute('alt', img.getAttribute(lang === 'en' ? 'data-alt-en' : 'data-alt-es'));
+    });
+    nav.setAttribute('aria-label', nav.getAttribute(lang === 'en' ? 'data-label-en' : 'data-label-es'));
+    pageLinks.forEach(function(a){
+      a.setAttribute('href', pathFor(a.getAttribute('data-page'), lang));
+    });
   }
 
   function showPage(name, scroll){
     if(validPages.indexOf(name) === -1){ name = 'inicio'; }
+    current = name;
     pages.forEach(function(p){
       p.classList.toggle('is-active', p.getAttribute('data-page') === name);
     });
-    navLinks.forEach(function(a){
+    menuLinks.forEach(function(a){
       var match = a.getAttribute('data-page') === name;
       a.classList.toggle('is-current', match);
       if(match){ a.setAttribute('aria-current','page'); } else { a.removeAttribute('aria-current'); }
     });
-    document.title = titles[name] || 'FLUMEX';
+    document.title = titles[lang][name] || 'FLUMEX';
     if(scroll !== false){ window.scrollTo(0,0); }
+  }
+
+  function closeMenu(){
+    nav.classList.remove('is-open');
+    menuBtn.setAttribute('aria-expanded','false');
   }
 
   function go(name){
     showPage(name);
-    history.pushState({page:name}, '', pathFor(name));
+    history.pushState({page:name, lang:lang}, '', pathFor(name, lang));
+    closeMenu();
+    main.setAttribute('tabindex','-1');
+    main.focus({preventScroll:true});
   }
 
   document.addEventListener('click', function(e){
     var a = e.target.closest ? e.target.closest('a[data-page]') : null;
     if(!a) return;
+    if(e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) return;
     var name = a.getAttribute('data-page');
     if(validPages.indexOf(name) === -1) return;
     e.preventDefault();
     go(name);
   });
 
-  window.addEventListener('popstate', function(){
-    showPage(nameFromPath(location.pathname));
+  langButtons.forEach(function(b){
+    b.addEventListener('click', function(){
+      setLang(b.getAttribute('data-set-lang'));
+      showPage(current, false);
+      history.replaceState({page:current, lang:lang}, '', pathFor(current, lang));
+    });
   });
 
-  // A direct visit or refresh on a path like /proyectos/ hits GitHub Pages' 404.html,
+  menuBtn.addEventListener('click', function(){
+    var open = !nav.classList.contains('is-open');
+    nav.classList.toggle('is-open', open);
+    menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && nav.classList.contains('is-open')){
+      closeMenu();
+      menuBtn.focus();
+    }
+  });
+
+  window.addEventListener('popstate', function(){
+    var p = parsePath(location.pathname);
+    setLang(p.lang);
+    showPage(p.name);
+  });
+
+  // A direct visit or refresh on a path like /proyectos/ or /en/proyectos/ hits GitHub Pages' 404.html,
   // which redirects here as /?p=%2Fproyectos%2F — restore the clean path before rendering.
   var redirectParam = new URLSearchParams(location.search).get('p');
   if(redirectParam){
     history.replaceState(null, '', redirectParam);
   }
 
-  showPage(nameFromPath(location.pathname), false);
+  var start = parsePath(location.pathname);
+  setLang(start.lang);
+  showPage(start.name, false);
 })();
 </script>
+</body>
+</html>
